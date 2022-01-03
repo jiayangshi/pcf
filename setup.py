@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(python_requires='>=3.7',
     name='pcfv',
-    version='0.0.3',
+    version='0.0.4',
     description='The common used function with pytorch for vision tasks',
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -21,7 +21,7 @@ setup(python_requires='>=3.7',
     license='MIT',
     packages=['pcfv'],
     install_requires=[
-        'pytorch >= 1.8.0',
+        'pytorch',
         'numpy',
         'matplotlib',
         'Pillow'
