@@ -21,7 +21,7 @@ setup(python_requires='>=3.7',
     license='MIT',
     packages=['pcfv'],
     install_requires=[
-        'pytorch',
+        'torch',
         'numpy',
         'matplotlib',
         'Pillow'
