@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-from layers.ConvBlock import ConvBlock
+from pcfv.layers.ConvBlock import ConvBlock
 
 
 class UNet(nn.Module):
