@@ -21,19 +21,19 @@ def train_loop(dataloader, model, optimizer, loss, device='cuda'):
         X = X.to(device, dtype=torch.float)
         pred = model(X)
         label = y.to(device, dtype=torch.float)
-        loss = loss(pred, label)
+        cur_loss = loss(pred, label)
 
         # Backpropagation
         optimizer.zero_grad()
-        loss.backward()
+        cur_loss.backward()
         optimizer.step()
 
         # display current batch and loss
-        loss, current = loss.item(), batch * len(X)
-        print(f"training loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
+        cur_loss, current = cur_loss.item(), batch * len(X)
+        print(f"training loss: {cur_loss:>7f}  [{current:>5d}/{size:>5d}]")
 
         # calculates the average training loss
-        training_loss += loss/batches
+        training_loss += cur_loss/batches
 
     return training_loss
 
@@ -54,15 +54,15 @@ def valid_loop(dataloader, model, loss, device='cuda'):
         X = X.to(device, dtype=torch.float)
         pred = model(X)
         label = y.to(device, dtype=torch.float)
-        loss = loss(pred, label)
+        cur_loss = loss(pred, label)
 
         # display current batch and loss
-        loss, current = loss.item(), batch * len(X)
-        print(f"validation loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
+        cur_loss, current = cur_loss.item(), batch * len(X)
+        print(f"validation loss: {cur_loss:>7f}  [{current:>5d}/{size:>5d}]")
 
         # calculates the average training loss
-        valid_loss += loss/batches
-    return valid_loss
+        validation_loss += cur_loss/batches
+    return validation_loss
 
 def test_loop(dataloader, model, loss, metric, output_directory=None,  device='cuda'):
     '''
@@ -83,8 +83,8 @@ def test_loop(dataloader, model, loss, metric, output_directory=None,  device='c
             X = X.to(device, dtype=torch.float)
             pred = model(X)
             label = y.to(device, dtype=torch.float)
-            loss = loss(pred, label)
-            metric = metric(pred, label)
+            cur_loss = loss(pred, label)
+            cur_metric = metric(pred, label)
             if not output_directory:
                 for j in range(pred.shape[0]):
                     fig = plt.figure(frameon=True)
@@ -108,8 +108,8 @@ def test_loop(dataloader, model, loss, metric, output_directory=None,  device='c
                     fig.savefig(os.path.join(output_directory, str(i) + ".png"))
                     print("The {}th test image is processed".format(i + 1))
                     i += 1
-            test_loss += loss / batches
-            test_metric += metric / batches
+            test_loss += cur_loss / batches
+            test_metric += cur_metric / batches
 
     print(f"Avg loss on whole image: {test_loss:>8f} \n")
     print(f"Avg metric on whole image: {test_metric:>8f} \n")

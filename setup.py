@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(python_requires='>=3.7',
     name='pcfv',
-    version='0.0.8',
+    version='0.0.9',
     description='The common used function with pytorch for vision tasks',
     long_description=long_description,
     long_description_content_type="text/markdown",
