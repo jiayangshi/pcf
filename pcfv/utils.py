@@ -17,6 +17,7 @@ def plot_images(*args, **kwargs):
     '''
     num_imgs = len(args)
     assert num_imgs in [2,3]
+    direction = 'horizontal'
     if 'direction' in kwargs.keys():
         direction = kwargs['direction']
         assert direction in ['horizontal', 'vertical']

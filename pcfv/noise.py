@@ -15,9 +15,10 @@ def add_possion_noise(img, photon_count):
     img = -np.log(img, **opt)
     return img
 
-def cal_attenuation_factor(sinogram, target):
+def cal_attenuation_factor(sinogram, target, margin):
+    print("Calculating the attenuation factor")
     factor = 1
-    while (abs(absorption(sinogram*factor)*100 - target) > 1):
+    while (abs(absorption(sinogram*factor)*100 - target) > margin):
         if absorption(sinogram*factor)*100 > target:
             factor /= 10
             if (absorption(sinogram*factor)*100 < target):
