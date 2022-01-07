@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 
 from pcfv.layers.ConvBlock import ConvBlock
-
+from pcfv.layers.ScalingBlock import ScalingBlock
 
 class UNet(nn.Module):
     '''
@@ -14,6 +14,8 @@ class UNet(nn.Module):
         :param out_channels:
         '''
         super(UNet, self).__init__()
+        self.scale_in = ScalingBlock(in_channels, conv3d=False)
+        self.scale_out = ScalingBlock(out_channels, conv3d=False)
 
         self.conv_block1 = ConvBlock(in_channels=in_channels, out_channels=64)
         self.max_pooling1 = nn.MaxPool2d(kernel_size=(2,2), stride=2)
@@ -36,6 +38,8 @@ class UNet(nn.Module):
         self.sigmoid = nn.Sigmoid()
 
     def forward(self, x):
+        x = self.scale_in(x)
+
         tmp1 = self.conv_block1(x)
         tmp2 = self.conv_block2(self.max_pooling1(tmp1))
         tmp3 = self.conv_block3(self.max_pooling1(tmp2))
@@ -53,5 +57,6 @@ class UNet(nn.Module):
         tmp13 = self.conv_block9(torch.cat((tmp12, tmp1), dim=1))
 
         y = self.sigmoid(self.conv1(tmp13))
+        y = self.scale_out(y)
 
         return y

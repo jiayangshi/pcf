@@ -2,6 +2,7 @@ import os
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
+from .layers.ScalingBlock import scaling_module_set_scale, scaling_module_set_bias
 
 def train_loop(dataloader, model, optimizer, loss, device='cuda'):
     '''
@@ -113,3 +114,52 @@ def test_loop(dataloader, model, loss, metric, output_directory=None,  device='c
 
     print(f"Avg loss on whole image: {test_loss:>8f} \n")
     print(f"Avg metric on whole image: {test_metric:>8f} \n")
+
+
+def set_normalization(model, dataloader):
+    """Normalize input and target data.
+
+    This function goes through all the training data to compute
+    the mean and std of the training data.
+
+    It modifies the network so that all future invocations of the
+    network first normalize input data and target data to have
+    mean zero and a standard deviation of one.
+
+    These modified parameters are not updated after this step and
+    are stored in the network, so that they are not lost when the
+    network is saved to and loaded from disk.
+
+    Normalizing in this way makes training more stable.
+
+    :param dataloader: The dataloader associated to the training data.
+    :returns:
+    :rtype:
+
+    """
+    print("Calculating the normalization factors")
+    mean_in = square_in = mean_out = square_out = 0
+
+    for (data_in, data_out) in dataloader:
+        mean_in += data_in.mean()
+        mean_out += data_out.mean()
+        square_in += data_in.pow(2).mean()
+        square_out += data_out.pow(2).mean()
+
+    mean_in /= len(dataloader)
+    mean_out /= len(dataloader)
+    square_in /= len(dataloader)
+    square_out /= len(dataloader)
+
+    std_in = np.sqrt(square_in - mean_in ** 2)
+    std_out = np.sqrt(square_out - mean_out ** 2)
+
+    # The input data should be roughly normally distributed after
+    # passing through scale_in. Note that the input is first
+    # scaled and then recentered.
+    scaling_module_set_scale(model.scale_in, 1 / std_in)
+    scaling_module_set_bias(model.scale_in, -mean_in / std_in)
+    # The scale_out layer should rather 'denormalize' the network
+    # output.
+    scaling_module_set_scale(model.scale_out, std_out)
+    scaling_module_set_bias(model.scale_out, mean_out)
