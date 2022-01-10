@@ -35,7 +35,7 @@ class UNet(nn.Module):
         self.conv_transpose4 = nn.ConvTranspose2d(in_channels=128, out_channels=64, kernel_size=(2, 2), stride=2)
         self.conv_block9 = ConvBlock(in_channels=128, out_channels=64)
         self.conv1 = nn.Conv2d(in_channels=64, out_channels=out_channels, kernel_size=(1,1))
-        self.sigmoid = nn.Sigmoid()
+        # self.sigmoid = nn.Sigmoid()
 
     def forward(self, x):
         x = self.scale_in(x)
@@ -56,7 +56,8 @@ class UNet(nn.Module):
         tmp12 = self.conv_transpose4(tmp11)
         tmp13 = self.conv_block9(torch.cat((tmp12, tmp1), dim=1))
 
-        y = self.sigmoid(self.conv1(tmp13))
+        y = self.conv1(tmp13)
+        # y = self.sigmoid(y)
         y = self.scale_out(y)
 
         return y

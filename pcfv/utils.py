@@ -16,7 +16,7 @@ def plot_images(*args, **kwargs):
     :return:
     '''
     num_imgs = len(args)
-    assert num_imgs in [2,3]
+    assert num_imgs in [2,3,4,5]
     direction = 'horizontal'
     if 'direction' in kwargs.keys():
         direction = kwargs['direction']
@@ -43,7 +43,7 @@ def plot_images(*args, **kwargs):
     ax2.set_xlabel(kwargs['x2'] if 'x2' in kwargs.keys() else None)
     ax2.set_title(kwargs['t2'] if 't2' in kwargs.keys() else None)
 
-    if num_imgs == 3:
+    if num_imgs >= 3:
         if direction=='horizontal':
             ax3 = plt.subplot(1, num_imgs, 3)
         else:
@@ -53,4 +53,26 @@ def plot_images(*args, **kwargs):
         plt.yticks([])
         ax3.set_xlabel(kwargs['x3'] if 'x3' in kwargs.keys() else None)
         ax3.set_title(kwargs['t3'] if 't3' in kwargs.keys() else None)
+
+    if num_imgs >= 4:
+        if direction=='horizontal':
+            ax3 = plt.subplot(1, num_imgs, 4)
+        else:
+            ax3 = plt.subplot(num_imgs, 1, 4)
+        ax3.imshow(args[2], cmap=style)
+        plt.xticks([])
+        plt.yticks([])
+        ax3.set_xlabel(kwargs['x4'] if 'x4' in kwargs.keys() else None)
+        ax3.set_title(kwargs['t4'] if 't4' in kwargs.keys() else None)
+
+    if num_imgs >= 5:
+        if direction=='horizontal':
+            ax3 = plt.subplot(1, num_imgs, 5)
+        else:
+            ax3 = plt.subplot(num_imgs, 1, 5)
+        ax3.imshow(args[2], cmap=style)
+        plt.xticks([])
+        plt.yticks([])
+        ax3.set_xlabel(kwargs['x5'] if 'x5' in kwargs.keys() else None)
+        ax3.set_title(kwargs['t5'] if 't5' in kwargs.keys() else None)
     plt.show()
