@@ -16,7 +16,8 @@ def plot_images(*args, **kwargs):
     :return:
     '''
     num_imgs = len(args)
-    subpostion = kwargs['subpostion']
+    subpostion = kwargs['subpostion'] if 'subpostion' in kwargs.keys() else (num_imgs, 1)
+
     assert num_imgs <= subpostion[0] * subpostion[1]
     style = kwargs['style'] if 'style' in kwargs.keys() else None
     fig = plt.figure(frameon=True)
