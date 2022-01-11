@@ -16,63 +16,49 @@ def plot_images(*args, **kwargs):
     :return:
     '''
     num_imgs = len(args)
-    assert num_imgs in [2,3,4,5]
-    direction = 'horizontal'
-    if 'direction' in kwargs.keys():
-        direction = kwargs['direction']
-        assert direction in ['horizontal', 'vertical']
+    subpostion = kwargs['subpostion']
+    assert num_imgs <= subpostion[0] * subpostion[1]
     style = kwargs['style'] if 'style' in kwargs.keys() else None
     fig = plt.figure(frameon=True)
-    if direction=='horizontal':
-        ax1 = plt.subplot(1, num_imgs, 1)
-    else:
-        ax1 = plt.subplot(num_imgs, 1, 1)
-    ax1.imshow(args[0], cmap=style)
+
+    ax1 = plt.subplot(subpostion[0], subpostion[1], 1)
+
+    vmin = kwargs['vmin'] if 'vmin' in kwargs.keys() else None
+    vmax = kwargs['vmax'] if 'vmax' in kwargs.keys() else None
+    ax1.imshow(args[0], cmap=style, vmin=vmin, vmax=vmax)
     plt.xticks([])
     plt.yticks([])
     ax1.set_xlabel(kwargs['x1'] if 'x1' in kwargs.keys() else None)
     ax1.set_title(kwargs['t1'] if 't1' in kwargs.keys() else None)
 
-    if direction=='horizontal':
-        ax2 = plt.subplot(1, num_imgs, 2)
-    else:
-        ax2 = plt.subplot(num_imgs, 1, 2)
-    ax2.imshow(args[1], cmap=style)
+    ax2 = plt.subplot(subpostion[0], subpostion[1], 2)
+    ax2.imshow(args[1], cmap=style, vmin=vmin, vmax=vmax)
     plt.xticks([])
     plt.yticks([])
     ax2.set_xlabel(kwargs['x2'] if 'x2' in kwargs.keys() else None)
     ax2.set_title(kwargs['t2'] if 't2' in kwargs.keys() else None)
 
     if num_imgs >= 3:
-        if direction=='horizontal':
-            ax3 = plt.subplot(1, num_imgs, 3)
-        else:
-            ax3 = plt.subplot(num_imgs, 1, 3)
-        ax3.imshow(args[2], cmap=style)
+        ax3 = plt.subplot(subpostion[0], subpostion[1], 3)
+        ax3.imshow(args[2], cmap=style, vmin=vmin, vmax=vmax)
         plt.xticks([])
         plt.yticks([])
         ax3.set_xlabel(kwargs['x3'] if 'x3' in kwargs.keys() else None)
         ax3.set_title(kwargs['t3'] if 't3' in kwargs.keys() else None)
 
     if num_imgs >= 4:
-        if direction=='horizontal':
-            ax3 = plt.subplot(1, num_imgs, 4)
-        else:
-            ax3 = plt.subplot(num_imgs, 1, 4)
-        ax3.imshow(args[2], cmap=style)
+        ax4 = plt.subplot(subpostion[0], subpostion[1], 4)
+        ax4.imshow(args[2], cmap=style, vmin=vmin, vmax=vmax)
         plt.xticks([])
         plt.yticks([])
-        ax3.set_xlabel(kwargs['x4'] if 'x4' in kwargs.keys() else None)
-        ax3.set_title(kwargs['t4'] if 't4' in kwargs.keys() else None)
+        ax4.set_xlabel(kwargs['x4'] if 'x4' in kwargs.keys() else None)
+        ax4.set_title(kwargs['t4'] if 't4' in kwargs.keys() else None)
 
     if num_imgs >= 5:
-        if direction=='horizontal':
-            ax3 = plt.subplot(1, num_imgs, 5)
-        else:
-            ax3 = plt.subplot(num_imgs, 1, 5)
-        ax3.imshow(args[2], cmap=style)
+        ax5 = plt.subplot(subpostion[0], subpostion[1], 5)
+        ax5.imshow(args[2], cmap=style, vmin=vmin, vmax=vmax)
         plt.xticks([])
         plt.yticks([])
-        ax3.set_xlabel(kwargs['x5'] if 'x5' in kwargs.keys() else None)
-        ax3.set_title(kwargs['t5'] if 't5' in kwargs.keys() else None)
+        ax5.set_xlabel(kwargs['x5'] if 'x5' in kwargs.keys() else None)
+        ax5.set_title(kwargs['t5'] if 't5' in kwargs.keys() else None)
     plt.show()
