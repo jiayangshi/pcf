@@ -49,7 +49,7 @@ def plot_images(*args, **kwargs):
 
     if num_imgs >= 4:
         ax4 = plt.subplot(subpostion[0], subpostion[1], 4)
-        ax4.imshow(args[2], cmap=style, vmin=vmin, vmax=vmax)
+        ax4.imshow(args[3], cmap=style, vmin=vmin, vmax=vmax)
         plt.xticks([])
         plt.yticks([])
         ax4.set_xlabel(kwargs['x4'] if 'x4' in kwargs.keys() else None)
@@ -57,7 +57,7 @@ def plot_images(*args, **kwargs):
 
     if num_imgs >= 5:
         ax5 = plt.subplot(subpostion[0], subpostion[1], 5)
-        ax5.imshow(args[2], cmap=style, vmin=vmin, vmax=vmax)
+        ax5.imshow(args[4], cmap=style, vmin=vmin, vmax=vmax)
         plt.xticks([])
         plt.yticks([])
         ax5.set_xlabel(kwargs['x5'] if 'x5' in kwargs.keys() else None)
