@@ -141,10 +141,10 @@ def set_normalization(model, dataloader):
     mean_in = square_in = mean_out = square_out = 0
 
     for (data_in, data_out) in dataloader:
-        mean_in += data_in.mean()
-        mean_out += data_out.mean()
-        square_in += data_in.pow(2).mean()
-        square_out += data_out.pow(2).mean()
+        mean_in += data_in.mean(axis=(2,3))
+        mean_out += data_out.mean(axis=(2,3))
+        square_in += data_in.pow(2).mean(axis=(2,3))
+        square_out += data_out.pow(2).mean(axis=(2,3))
 
     mean_in /= len(dataloader)
     mean_out /= len(dataloader)
