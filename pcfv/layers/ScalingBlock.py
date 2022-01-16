@@ -40,7 +40,7 @@ def scaling_module_set_scale(sm, s):
         assert c_out == c_in == s.shape[1]
         sm.weight.data.zero_()
         for i in range(c_out):
-            sm.weight.data[i, i] = s[:, 0]
+            sm.weight.data[i, i] = s[:, i]
 
 
 
@@ -48,4 +48,4 @@ def scaling_module_set_bias(sm, bias):
     if isinstance(bias, float) :
         sm.bias.data.fill_(bias)
     if torch.is_tensor(bias):
-        sm.weight.data = bias[0]
+        sm.bias.data = bias[0]
