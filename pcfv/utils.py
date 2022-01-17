@@ -63,3 +63,4 @@ def plot_images(*args, **kwargs):
         ax5.set_xlabel(kwargs['x5'] if 'x5' in kwargs.keys() else None)
         ax5.set_title(kwargs['t5'] if 't5' in kwargs.keys() else None)
     plt.show()
+    return fig
