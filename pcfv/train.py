@@ -47,7 +47,7 @@ def valid_loop(dataloader, model, loss, device='cuda'):
     :param device: The device on which the validation is done
     :return: The average validation loss
     '''
-    valid_loss = 0
+    validation_loss = 0
     size = len(dataloader.dataset)
     batches = len(dataloader)
     for batch, (X, y) in enumerate(dataloader):
