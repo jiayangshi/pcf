@@ -72,3 +72,7 @@ class UNet(nn.Module):
         y = self.scale_out(y)
 
         return y
+
+    def normalized_input(self, x):
+        x = self.scale_in(x)
+        return x

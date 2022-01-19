@@ -62,5 +62,13 @@ def plot_images(*args, **kwargs):
         plt.yticks([])
         ax5.set_xlabel(kwargs['x5'] if 'x5' in kwargs.keys() else None)
         ax5.set_title(kwargs['t5'] if 't5' in kwargs.keys() else None)
+        
+    if num_imgs >= 6:
+        ax6 = plt.subplot(subpostion[0], subpostion[1], 6)
+        ax6.imshow(args[5], cmap=style, vmin=vmin, vmax=vmax)
+        plt.xticks([])
+        plt.yticks([])
+        ax6.set_xlabel(kwargs['x6'] if 'x6' in kwargs.keys() else None)
+        ax6.set_title(kwargs['t6'] if 't6' in kwargs.keys() else None)
     plt.show()
     return fig
