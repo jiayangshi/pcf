@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
-
+import matplotlib
+matplotlib.rc("figure", dpi=250)
 '''
 The function used to count the trainable parameters of a network
 '''
@@ -15,6 +16,8 @@ def plot_images(*args, **kwargs):
                    'style' specifies the image style
     :return:
     '''
+    TEXTWIDTH_DOUBLE = 455.24408 / 72
+    FIGWIDTH_DOUBLE = TEXTWIDTH_DOUBLE
     num_imgs = len(args)
     subpostion = kwargs['subpostion'] if 'subpostion' in kwargs.keys() else (1, num_imgs)
 
@@ -70,5 +73,9 @@ def plot_images(*args, **kwargs):
         plt.yticks([])
         ax6.set_xlabel(kwargs['x6'] if 'x6' in kwargs.keys() else None)
         ax6.set_title(kwargs['t6'] if 't6' in kwargs.keys() else None)
+
+    fig.set_figwidth(FIGWIDTH_DOUBLE)
+    fig.set_figheight(FIGWIDTH_DOUBLE)
+
     plt.show()
     return fig
