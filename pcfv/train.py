@@ -1,6 +1,7 @@
 import os
 import torch
 import numpy as np
+from tqdm import tqdm
 import matplotlib.pyplot as plt
 from .layers.ScalingBlock import scaling_module_set_scale, scaling_module_set_bias
 
@@ -17,7 +18,8 @@ def train_loop(dataloader, model, optimizer, loss, device='cuda'):
     training_loss = 0
     size = len(dataloader.dataset)
     batches = len(dataloader)
-    for batch, (X, y) in enumerate(dataloader):
+    bar = tqdm(dataloader)
+    for batch, (X, y) in enumerate(bar):
         # Compute prediction and loss
         X = X.to(device, dtype=torch.float)
         pred = model(X)
@@ -31,7 +33,7 @@ def train_loop(dataloader, model, optimizer, loss, device='cuda'):
 
         # display current batch and loss
         cur_loss, current = cur_loss.item(), batch * len(X)
-        print(f"training loss: {cur_loss:>7f}  [{current:>5d}/{size:>5d}]")
+        bar.set_description(f"training loss: {cur_loss:>7f}  [{current:>5d}/{size:>5d}]")
 
         # calculates the average training loss
         training_loss += cur_loss/batches
@@ -50,7 +52,8 @@ def valid_loop(dataloader, model, loss, device='cuda'):
     validation_loss = 0
     size = len(dataloader.dataset)
     batches = len(dataloader)
-    for batch, (X, y) in enumerate(dataloader):
+    bar = tqdm(dataloader)
+    for batch, (X, y) in enumerate(bar):
         # Compute prediction and loss
         X = X.to(device, dtype=torch.float)
         pred = model(X)
@@ -59,7 +62,7 @@ def valid_loop(dataloader, model, loss, device='cuda'):
 
         # display current batch and loss
         cur_loss, current = cur_loss.item(), batch * len(X)
-        print(f"validation loss: {cur_loss:>7f}  [{current:>5d}/{size:>5d}]")
+        bar.set_description(f"validation loss: {cur_loss:>7f}  [{current:>5d}/{size:>5d}]")
 
         # calculates the average training loss
         validation_loss += cur_loss/batches
@@ -163,3 +166,11 @@ def set_normalization(model, dataloader):
     # output.
     scaling_module_set_scale(model.scale_out, std_out)
     scaling_module_set_bias(model.scale_out, mean_out)
+
+def early_stopping(valid_losses, patience=5):
+    if len(patience) > 5:
+        mean = sum(valid_losses[-patience-1:-1])
+        if valid_losses[-1] > mean:
+            return True
+    return False
+
