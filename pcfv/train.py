@@ -168,7 +168,7 @@ def set_normalization(model, dataloader):
     scaling_module_set_bias(model.scale_out, mean_out)
 
 def early_stopping(valid_losses, patience=5):
-    if len(patience) > 5:
+    if len(valid_losses) > patience:
         mean = sum(valid_losses[-patience-1:-1])
         if valid_losses[-1] > mean:
             return True
