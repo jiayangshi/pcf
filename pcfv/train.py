@@ -169,7 +169,7 @@ def set_normalization(model, dataloader):
 
 def early_stopping(valid_losses, patience=5):
     if len(valid_losses) > patience:
-        mean = sum(valid_losses[-patience-2:-2]) / patience
+        mean = sum(valid_losses[-patience-2:-1]) / patience
         if valid_losses[-1] > mean:
             return True
     return False
