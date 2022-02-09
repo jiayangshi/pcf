@@ -22,6 +22,10 @@ def plot_images(*args, **kwargs):
     subpostion = kwargs['subpostion'] if 'subpostion' in kwargs.keys() else (1, num_imgs)
 
     assert num_imgs <= subpostion[0] * subpostion[1]
+
+    show_image = kwargs['show_image'] if 'show_image' in kwargs.keys() else True
+    assert show_image in (True, False)
+
     style = kwargs['style'] if 'style' in kwargs.keys() else None
     fig = plt.figure(frameon=True)
 
@@ -76,6 +80,6 @@ def plot_images(*args, **kwargs):
 
     fig.set_figwidth(FIGWIDTH_DOUBLE)
     fig.set_figheight(FIGWIDTH_DOUBLE)
-
-    plt.show()
+    if show_image:
+        plt.show()
     return fig
