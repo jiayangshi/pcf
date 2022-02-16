@@ -53,19 +53,20 @@ def valid_loop(dataloader, model, loss, device='cuda'):
     size = len(dataloader.dataset)
     batches = len(dataloader)
     bar = tqdm(dataloader)
-    for batch, (X, y) in enumerate(bar):
-        # Compute prediction and loss
-        X = X.to(device, dtype=torch.float)
-        pred = model(X)
-        label = y.to(device, dtype=torch.float)
-        cur_loss = loss(pred, label)
+    with torch.no_grad():
+        for batch, (X, y) in enumerate(bar):
+            # Compute prediction and loss
+            X = X.to(device, dtype=torch.float)
+            pred = model(X)
+            label = y.to(device, dtype=torch.float)
+            cur_loss = loss(pred, label)
 
-        # display current batch and loss
-        cur_loss, current = cur_loss.item(), batch * len(X)
-        bar.set_description(f"validation loss: {cur_loss:>7f}  [{current:>5d}/{size:>5d}]")
+            # display current batch and loss
+            cur_loss, current = cur_loss.item(), batch * len(X)
+            bar.set_description(f"validation loss: {cur_loss:>7f}  [{current:>5d}/{size:>5d}]")
 
-        # calculates the average training loss
-        validation_loss += cur_loss/batches
+            # calculates the average training loss
+            validation_loss += cur_loss/batches
     return validation_loss
 
 def test_loop(dataloader, model, loss, metric, output_directory=None,  device='cuda'):
