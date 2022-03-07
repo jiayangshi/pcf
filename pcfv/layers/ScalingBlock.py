@@ -30,6 +30,7 @@ def ScalingBlock(num_channels, *, conv3d=False):
 
 
 def scaling_module_set_scale(sm, s):
+    device = sm.weight.data.device
     c_out, c_in = sm.weight.shape[:2]
     assert c_out == c_in
     if torch.is_tensor(s):
@@ -43,12 +44,14 @@ def scaling_module_set_scale(sm, s):
         sm.weight.data.zero_()
         for i in range(c_out):
             sm.weight.data[i, i] = s[:, i]
-
+    sm.to(device)
 
 
 def scaling_module_set_bias(sm, bias):
+    device = sm.bias.data.device
     if isinstance(bias, float) :
         sm.bias.data.fill_(bias)
     if torch.is_tensor(bias):
         bias = bias.float()
         sm.bias.data = bias[0]
+    sm.to(device)

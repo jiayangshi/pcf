@@ -19,9 +19,9 @@ def plot_images(*args, **kwargs):
     TEXTWIDTH_DOUBLE = 455.24408 / 72
     FIGWIDTH_DOUBLE = TEXTWIDTH_DOUBLE
     num_imgs = len(args)
-    subpostion = kwargs['subpostion'] if 'subpostion' in kwargs.keys() else (1, num_imgs)
+    subposition = kwargs['subposition'] if 'subposition' in kwargs.keys() else (1, num_imgs)
 
-    assert num_imgs <= subpostion[0] * subpostion[1]
+    assert num_imgs <= subposition[0] * subposition[1]
 
     show_image = kwargs['show_image'] if 'show_image' in kwargs.keys() else True
     assert show_image in (True, False)
@@ -29,7 +29,7 @@ def plot_images(*args, **kwargs):
     style = kwargs['style'] if 'style' in kwargs.keys() else None
     fig = plt.figure(frameon=True)
 
-    ax1 = plt.subplot(subpostion[0], subpostion[1], 1)
+    ax1 = plt.subplot(subposition[0], subposition[1], 1)
 
     vmin = kwargs['vmin'] if 'vmin' in kwargs.keys() else None
     vmax = kwargs['vmax'] if 'vmax' in kwargs.keys() else None
@@ -39,7 +39,7 @@ def plot_images(*args, **kwargs):
     ax1.set_xlabel(kwargs['x1'] if 'x1' in kwargs.keys() else None)
     ax1.set_title(kwargs['t1'] if 't1' in kwargs.keys() else None)
 
-    ax2 = plt.subplot(subpostion[0], subpostion[1], 2)
+    ax2 = plt.subplot(subposition[0], subposition[1], 2)
     ax2.imshow(args[1], cmap=style, vmin=vmin, vmax=vmax)
     plt.xticks([])
     plt.yticks([])
@@ -47,7 +47,7 @@ def plot_images(*args, **kwargs):
     ax2.set_title(kwargs['t2'] if 't2' in kwargs.keys() else None)
 
     if num_imgs >= 3:
-        ax3 = plt.subplot(subpostion[0], subpostion[1], 3)
+        ax3 = plt.subplot(subposition[0], subposition[1], 3)
         ax3.imshow(args[2], cmap=style, vmin=vmin, vmax=vmax)
         plt.xticks([])
         plt.yticks([])
@@ -55,7 +55,7 @@ def plot_images(*args, **kwargs):
         ax3.set_title(kwargs['t3'] if 't3' in kwargs.keys() else None)
 
     if num_imgs >= 4:
-        ax4 = plt.subplot(subpostion[0], subpostion[1], 4)
+        ax4 = plt.subplot(subposition[0], subposition[1], 4)
         ax4.imshow(args[3], cmap=style, vmin=vmin, vmax=vmax)
         plt.xticks([])
         plt.yticks([])
@@ -63,7 +63,7 @@ def plot_images(*args, **kwargs):
         ax4.set_title(kwargs['t4'] if 't4' in kwargs.keys() else None)
 
     if num_imgs >= 5:
-        ax5 = plt.subplot(subpostion[0], subpostion[1], 5)
+        ax5 = plt.subplot(subposition[0], subposition[1], 5)
         ax5.imshow(args[4], cmap=style, vmin=vmin, vmax=vmax)
         plt.xticks([])
         plt.yticks([])
@@ -71,7 +71,7 @@ def plot_images(*args, **kwargs):
         ax5.set_title(kwargs['t5'] if 't5' in kwargs.keys() else None)
         
     if num_imgs >= 6:
-        ax6 = plt.subplot(subpostion[0], subpostion[1], 6)
+        ax6 = plt.subplot(subposition[0], subposition[1], 6)
         ax6.imshow(args[5], cmap=style, vmin=vmin, vmax=vmax)
         plt.xticks([])
         plt.yticks([])
