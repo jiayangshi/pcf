@@ -1,11 +1,11 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(python_requires='>=3.7',
     name='pcfv',
-    version='0.0.17',
+    version='0.0.19',
     description='The common used function with pytorch for vision tasks',
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -19,7 +19,7 @@ setup(python_requires='>=3.7',
     author='Jiayang Shi',
     author_email='j.shi@liacs.leidenuniv.nl',
     license='MIT',
-    packages=['pcfv'],
+    packages=find_packages(),
     install_requires=[
         'torch',
         'numpy',
