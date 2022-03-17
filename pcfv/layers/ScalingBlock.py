@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-def ScalingBlock(num_channels, *, conv3d=False):
+def ScalingBlock(num_channels):
     """Make a Module that normalizes the input data.
 
     This part of the network can be used to renormalize the input
@@ -16,10 +16,7 @@ def ScalingBlock(num_channels, *, conv3d=False):
     :rtype: torch.nn.ConvNd
 
     """
-    if conv3d:
-        c = nn.Conv3d(num_channels, num_channels, 1)
-    else:
-        c = nn.Conv2d(num_channels, num_channels, 1)
+    c = nn.Conv2d(num_channels, num_channels, 1)
     c.bias.requires_grad = False
     c.weight.requires_grad = False
 

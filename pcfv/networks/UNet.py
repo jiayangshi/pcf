@@ -8,45 +8,36 @@ class UNet(nn.Module):
     '''
     Implementation of UNet (Ronneberger et al. U-Net: Convolutional Networks for Biomedical Image Segmentation)
     '''
-    def __init__(self, in_channels, out_channels, conv3d=False):
+    def __init__(self, in_channels, out_channels, inter_channel=64):
         '''
         :param in_channels:
         :param out_channels:
         '''
         super(UNet, self).__init__()
-        if conv3d:
-            MaxPool = nn.MaxPool3d
-            ConvTranspose = nn.ConvTranspose3d
-            self.conv1 = nn.Conv3d(in_channels=64, out_channels=out_channels, kernel_size=(1, 1, 1))
-        else:
-            MaxPool = nn.MaxPool2d
-            ConvTranspose = nn.ConvTranspose2d
-            self.conv1 = nn.Conv2d(in_channels=64, out_channels=out_channels, kernel_size=(1, 1))
 
+        self.scale_in = ScalingBlock(in_channels)
+        self.scale_out = ScalingBlock(out_channels)
 
-        self.scale_in = ScalingBlock(in_channels, conv3d=conv3d)
-        self.scale_out = ScalingBlock(out_channels, conv3d=conv3d)
+        self.conv_block1 = ConvBlock(in_channels=in_channels, out_channels=inter_channel)
+        self.conv_block2 = ConvBlock(in_channels=inter_channel, out_channels=inter_channel*2)
+        self.conv_block3 = ConvBlock(in_channels=inter_channel*2, out_channels=inter_channel*4)
+        self.conv_block4 = ConvBlock(in_channels=inter_channel*4, out_channels=inter_channel*8)
+        self.conv_block5 = ConvBlock(in_channels=inter_channel*8, out_channels=inter_channel*16)
+        self.conv_block6 = ConvBlock(in_channels=inter_channel*16, out_channels=inter_channel*8)
+        self.conv_block7 = ConvBlock(in_channels=inter_channel*8, out_channels=inter_channel*4)
+        self.conv_block8 = ConvBlock(in_channels=inter_channel*4, out_channels=inter_channel*2)
+        self.conv_block9 = ConvBlock(in_channels=inter_channel*2, out_channels=inter_channel)
 
-        self.conv_block1 = ConvBlock(in_channels=in_channels, out_channels=64, conv3d=conv3d)
-        self.conv_block2 = ConvBlock(in_channels=64, out_channels=128, conv3d=conv3d)
-        self.conv_block3 = ConvBlock(in_channels=128, out_channels=256, conv3d=conv3d)
-        self.conv_block4 = ConvBlock(in_channels=256, out_channels=512, conv3d=conv3d)
-        self.conv_block5 = ConvBlock(in_channels=512, out_channels=1024, conv3d=conv3d)
-        self.conv_block6 = ConvBlock(in_channels=1024, out_channels=512, conv3d=conv3d)
-        self.conv_block7 = ConvBlock(in_channels=512, out_channels=256, conv3d=conv3d)
-        self.conv_block8 = ConvBlock(in_channels=256, out_channels=128, conv3d=conv3d)
-        self.conv_block9 = ConvBlock(in_channels=128, out_channels=64, conv3d=conv3d)
+        self.max_pooling1 = nn.MaxPool2d(kernel_size=2, stride=2)
+        self.max_pooling2 = nn.MaxPool2d(kernel_size=2, stride=2)
+        self.max_pooling3 = nn.MaxPool2d(kernel_size=2, stride=2)
+        self.max_pooling4 = nn.MaxPool2d(kernel_size=2, stride=2)
+        self.conv_transpose1 = nn.ConvTranspose2d(in_channels=inter_channel*16, out_channels=inter_channel*8, kernel_size=2, stride=2)
+        self.conv_transpose2 = nn.ConvTranspose2d(in_channels=inter_channel*8, out_channels=inter_channel*4, kernel_size=2, stride=2)
+        self.conv_transpose3 = nn.ConvTranspose2d(in_channels=inter_channel*4, out_channels=inter_channel*2, kernel_size=2, stride=2)
+        self.conv_transpose4 = nn.ConvTranspose2d(in_channels=inter_channel*2, out_channels=inter_channel, kernel_size=2, stride=2)
 
-        self.max_pooling1 = MaxPool(kernel_size=2, stride=2)
-        self.max_pooling2 = MaxPool(kernel_size=2, stride=2)
-        self.max_pooling3 = MaxPool(kernel_size=2, stride=2)
-        self.max_pooling4 = MaxPool(kernel_size=2, stride=2)
-        self.conv_transpose1 = ConvTranspose(in_channels=1024, out_channels=512, kernel_size=2, stride=2)
-        self.conv_transpose2 = ConvTranspose(in_channels=512, out_channels=256, kernel_size=2, stride=2)
-        self.conv_transpose3 = ConvTranspose(in_channels=256, out_channels=128, kernel_size=2, stride=2)
-        self.conv_transpose4 = ConvTranspose(in_channels=128, out_channels=64, kernel_size=2, stride=2)
-
-        # self.sigmoid = nn.Sigmoid()
+        self.final_conv = nn.Conv2d(in_channels=inter_channel, out_channels=out_channels, kernel_size=(1, 1))
 
     def forward(self, x):
         x = self.scale_in(x)
@@ -67,8 +58,7 @@ class UNet(nn.Module):
         tmp12 = self.conv_transpose4(tmp11)
         tmp13 = self.conv_block9(torch.cat((tmp12, tmp1), dim=1))
 
-        y = self.conv1(tmp13)
-        # y = self.sigmoid(y)
+        y = self.final_conv(tmp13)
         y = self.scale_out(y)
 
         return y
