@@ -168,12 +168,12 @@ def set_normalization(model, dataloader):
     scaling_module_set_scale(model.scale_out, std_out)
     scaling_module_set_bias(model.scale_out, mean_out)
 
-def early_stopping(valid_losses, patience=4):
-    if len(valid_losses) > patience:
-        # if current loss larger than max value in patience
-        # or last patience number losses non decreasing
-        if valid_losses[-1] > max(valid_losses[-patience-1:-1]) or \
-                all(x<=y for x, y in zip(valid_losses[-patience-1:-1], valid_losses[-patience:])):
-            return True
-    return False
+# def early_stopping(valid_losses, patience=4):
+#     if len(valid_losses) > patience:
+#         # if current loss larger than max value in patience
+#         # or last patience number losses non decreasing
+#         if valid_losses[-1] > max(valid_losses[-patience-1:-1]) or \
+#                 all(x<=y for x, y in zip(valid_losses[-patience-1:-1], valid_losses[-patience:])):
+#             return True
+#     return False
 
