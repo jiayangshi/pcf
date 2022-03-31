@@ -47,7 +47,7 @@ class EarlyStopping:
         '''Saves model when validation loss decrease.'''
         if self.verbose:
             print(f'Validation loss decreased ({self.val_loss_min:.6f} --> {val_loss:.6f}).  Saving model ...')
-        if isinstance(model, nn.DataParallel):
+        if isinstance(model, torch.nn.DataParallel):
             torch.save(model.module.state_dict(), self.path)
         else:
             torch.save(model.state_dict(), self.path)
