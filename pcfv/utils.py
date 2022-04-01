@@ -81,5 +81,5 @@ def plot_images(*args, **kwargs):
     fig.set_figwidth(FIGWIDTH_DOUBLE)
     fig.set_figheight(FIGWIDTH_DOUBLE)
     if show_image:
-        plt.show()
+        fig.show()
     return fig
