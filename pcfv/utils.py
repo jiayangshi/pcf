@@ -18,6 +18,9 @@ def plot_images(*args, **kwargs):
     '''
     TEXTWIDTH_DOUBLE = 455.24408 / 72
     FIGWIDTH_DOUBLE = TEXTWIDTH_DOUBLE
+    width = kwargs['width'] if 'width' in kwargs.keys() else FIGWIDTH_DOUBLE
+    height = kwargs['height'] if 'height' in kwargs.keys() else FIGWIDTH_DOUBLE
+
     num_imgs = len(args)
     subposition = kwargs['subposition'] if 'subposition' in kwargs.keys() else (1, num_imgs)
 
@@ -78,8 +81,8 @@ def plot_images(*args, **kwargs):
         ax6.set_xlabel(kwargs['x6'] if 'x6' in kwargs.keys() else None)
         ax6.set_title(kwargs['t6'] if 't6' in kwargs.keys() else None)
 
-    fig.set_figwidth(FIGWIDTH_DOUBLE)
-    fig.set_figheight(FIGWIDTH_DOUBLE)
+    fig.set_figwidth(width)
+    fig.set_figheight(height)
     if show_image:
         fig.show()
     return fig
