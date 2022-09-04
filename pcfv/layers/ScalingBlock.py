@@ -30,17 +30,15 @@ def scaling_module_set_scale(sm, s):
     device = sm.weight.data.device
     c_out, c_in = sm.weight.shape[:2]
     assert c_out == c_in
-    if torch.is_tensor(s):
-        s = s.float()
-    if isinstance(s, float) or (torch.is_tensor(s) and s.shape[1]==1):
+    if isinstance(s, float) or (torch.is_tensor(s) and s.shape[0]==1):
         sm.weight.data.zero_()
         for i in range(c_out):
             sm.weight.data[i, i] = s
-    if torch.is_tensor(s) and s.shape[1]>1:
-        assert c_out == c_in == s.shape[1]
+    if torch.is_tensor(s) and s.shape[0]>1:
+        assert c_out == c_in == s.shape[0]
         sm.weight.data.zero_()
         for i in range(c_out):
-            sm.weight.data[i, i] = s[:, i]
+            sm.weight.data[i, i] = s[i]
     sm.to(device)
 
 
@@ -49,6 +47,5 @@ def scaling_module_set_bias(sm, bias):
     if isinstance(bias, float) :
         sm.bias.data.fill_(bias)
     if torch.is_tensor(bias):
-        bias = bias.float()
-        sm.bias.data = bias[0]
+        sm.bias.data = bias
     sm.to(device)
